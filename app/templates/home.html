@@ -1,7 +1,15 @@
-{%extends 'base.html'%}
-{%block content%}
+{% extends 'base.html' %}
 
-<a href="{{url_for('main.register')}}">Register</a>
-<a href="{{url_for('main.login')}}">Login</a>
+{% block content %}
+    <h1>Welcome to the Family Health App</h1>
+    <p>Securely manage and access your family's health records in one place.</p>
 
-{%endblock%}
+    {% if current_user.is_authenticated %}
+        <p>Hello, {{ current_user.username }}! You can go to your <a href="{{ url_for('main.dashboard') }}">Dashboard</a>.</p>
+    {% else %}
+        <p><a href="{{ url_for('main.login') }}">Login</a> or <a href="{{ url_for('main.register') }}">Register</a> to get started.</p>
+    {% endif %}
+{% endblock %}
+
+
+

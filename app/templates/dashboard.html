@@ -3,6 +3,7 @@
 {% block content %}
     <h2>Your Dashboard</h2>
     <p>Hello, {{ current_user.username }}! From here, you can manage your family's health information.</p>
+    <a href="{{ url_for('main.emergency_mode') }}">Emergency</a>
 
     <ul style="list-style-type: none; padding: 0;">
         <li style="margin-bottom: 10px;">

@@ -79,7 +79,7 @@ def view_member(member_id):
     member = FamilyMember.query.get_or_404(member_id)
     if member.user_id != current_user.id:
         flash('Unotherized')
-        return redirect(url_for('mai.list_members'))
+        return redirect(url_for('main.list_members'))
     return render_template('view_member.html',member=member)
 
 @main.route('/member/<int:member_id>/record/add', methods=['GET','POST'])
@@ -187,6 +187,12 @@ def delete_record(record_id):
     db.session.commit()
     flash('Record deleted')
     return redirect(url_for('main.view_records',member_id=record.family_member_id))
+
+@main.route('/emergency')
+@login_required
+def emergency_mode():
+    members = FamilyMember.query.filter_by(user_id=current_user.id).all()
+    return render_template('emergency.html',members=members)
 
 
     

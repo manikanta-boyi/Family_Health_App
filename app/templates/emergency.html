@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>🚨 Emergency Mode 🚨</h2>
+
+{% for member in members %}
+    <h3>{{ member.name }} ({{ member.relation }})</h3>
+    <ul>
+        {% for record in member.records %}
+            <li>
+                <strong>{{ record.condition }}</strong> - {{ record.medication }} ({{ record.date }})
+                <br>
+                Notes: {{ record.notes }}
+            </li>
+        {% else %}
+            <li>No health records available</li>
+        {% endfor %}
+    </ul>
+{% endfor %}
+
+{% endblock %}

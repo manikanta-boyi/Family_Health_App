@@ -1,13 +1,44 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <title>Family Health App</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
 </head>
 <body>
-    <h1>Welcome to Family Health Appp</h1>
-    <p>Securely manage your family's medical history</p>
-    {%block content%}
-    {%endblock%}
+    <header>
+        <nav>
+            <a href="{{ url_for('main.home') }}">Home</a>
+            
+            {% if current_user.is_authenticated %}
+                <a href="{{ url_for('main.dashboard') }}">Dashboard</a>
+                <a href="{{ url_for('main.list_members') }}">Family Members</a>
+                <a href="{{ url_for('main.emergency_mode') }}">Emergency</a>
+                <a href="{{ url_for('main.logout') }}">Logout</a>
+            {% else %}
+                <a href="{{ url_for('main.login') }}">Login</a>
+                <a href="{{ url_for('main.register') }}">Register</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <main>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
 </body>
 </html>
+
+
+
+
