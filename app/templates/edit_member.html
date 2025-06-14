@@ -1,0 +1,14 @@
+{%extends 'base.html'%}
+{%block content%}
+<h2>Edit Family Member</h2>
+<form method="POST">
+    {{form.hidden_tag()}}
+    <p>{{ form.name.label }} {{ form.name() }}</p>
+    <p>{{ form.age.label }} {{ form.age() }}</p>
+    <p>{{ form.gender.label }} {{ form.gender() }}</p>
+    <p>{{ form.relation.label }} {{ form.relation() }}</p>
+    <p>{{ form.submit() }}</p>
+</form>
+<a href="{{ url_for('main.members') }}">Back to Members</a>
+
+{%endblock%}

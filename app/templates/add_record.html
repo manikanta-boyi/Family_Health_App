@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Add Health Record</h2>
+    
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        
+        <p>
+            {{ form.condition.label }}<br>
+            {{ form.condition(size=32) }}
+        </p>
+
+        <p>
+            {{ form.medication.label }}<br>
+            {{ form.medication(rows=3, cols=32) }}
+        </p>
+
+        <p>
+            {{ form.notes.label }}<br>
+            {{ form.notes(rows=3, cols=32) }}
+        </p>
+
+        <p>
+            {{ form.date.label }}<br>
+            {{ form.date() }}
+        </p>
+
+        <p>{{ form.submit() }}</p>
+    </form>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Health Records for {{ member.name }}</h2>
+
+<ul>
+    {% for record in records %}
+        <li>
+            <strong>{{ record.condition }}</strong> - {{ record.date }} 
+            <a href="{{ url_for('main.edit_record', record_id=record.id) }}">Edit</a> | 
+            <form method="POST" action="{{ url_for('main.delete_record', record_id=record.id) }}" style="display:inline;">
+                <button type="submit">Delete</button>
+            </form>
+        </li>
+    {% else %}
+        <li>No records found.</li>
+    {% endfor %}
+</ul>
+
+<a href="{{ url_for('main.add_record', member_id=member.id) }}">Add New Record</a>
+{% endblock %}

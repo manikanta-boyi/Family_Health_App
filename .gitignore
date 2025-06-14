@@ -1,1 +1,11 @@
 healthenv/
+.env/
+venv/
+
+# Python bytecode and cache files
+*.pyc
+__pycache__/
+.pytest_cache/
+
+# Operating System specific files
+.DS_Store

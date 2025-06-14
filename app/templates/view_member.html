@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>{{ member.name }} ({{ member.relation }})</h2>
+<p>Age: {{ member.age }}</p>
+<p>Gender: {{ member.gender }}</p>
+
+<h3>Health Records</h3>
+<ul>
+  {% for record in member.records %}
+    <li>
+      {{ record.condition }} - {{ record.date }}
+      <a href="{{ url_for('main.edit_record', record_id=record.id) }}">Edit</a> |
+      <a href="{{ url_for('main.delete_record', record_id=record.id) }}">Delete</a>
+    </li>
+  {% endfor %}
+</ul>
+
+<a href="{{ url_for('main.add_record', member_id=member.id) }}">Add Health Record</a><br>
+<a href="{{ url_for('main.members') }}">Back to Members</a>
+{% endblock %}

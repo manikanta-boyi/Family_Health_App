@@ -1,0 +1,19 @@
+{%extends 'base.html'%}
+
+{%block content%}
+
+<ul>
+    {%for member in mebers%}
+    <li>
+        {{member.name}} ({{member.relation}},{{member.age}} Years old)
+        <a href="{{url_for('main.view_member',member_id=member.id)}}">View</a>|
+        <a href="{{url_for('main.edit_member',member_id=member.id)}}">Edit</a>|
+        <a href="{{url_for('main.delete_member',member_id=member.id)}}">Delete</a>
+    </li>
+    {%endfor%}
+</ul>
+
+<a href="{{url_for('main.add_member')}}">Add family member</a>
+
+
+{%endblock%}

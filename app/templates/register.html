@@ -1,12 +1,12 @@
 {%extends 'base.html'%}
 
 {%block content%}
-<form action="POST">
+<form method="POST" action="{{ url_for('main.register') }}">
     {{form.hidden_tag()}}
-    {{form.email.lable}}{{form.email()}} <br>
-    {{form.username.lable}}{{form.username()}} <br>
-    {{form.password.lable}}{{form.password()}} <br>
-    {{form.conf_password.lable}}{{form.conf_password()}} <br>
+    {{form.email.label}}{{form.email()}} <br>
+    {{form.username.label}}{{form.username()}} <br>
+    {{form.password.label}}{{form.password()}} <br>
+    {{form.conf_password.label}}{{form.conf_password()}} <br>
     {{form.submit()}}
 </form>
 
