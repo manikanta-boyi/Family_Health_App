@@ -43,7 +43,8 @@ def login():
 @main.route('/dashboard')
 @login_required
 def dashboard():
-    return render_template('dashboard.html')
+    total_members = FamilyMember.query.filter_by(user_id=current_user.id).count()
+    return render_template('dashboard.html',total_members=total_members)
 
 @main.route('/logout')
 @login_required
@@ -118,14 +119,14 @@ def delete_member(member_id):
 @main.route('/edit/member/<int:member_id>',methods=['GET','POST'])
 @login_required
 def edit_member(member_id):
-    member = FamilyMember.query.get(id=member_id)
+    member = FamilyMember.query.get(member_id)
     
     if not member:
         flash('Meber not found')
         return redirect(url_for('main.list_members'))
     if current_user.id != member.user_id:
         flash('Unautherized')
-        return redirect('main.home')
+        return redirect(url_for('main.home'))
     form = FamilyMemberForm()
 
     if form.validate_on_submit():
@@ -135,7 +136,7 @@ def edit_member(member_id):
         member.relation = form.relation.data
         db.session.commit()
         flash('Member updated successfully')
-        return redirect(url_for('main.members'))
+        return redirect(url_for('main.list_members'))
     
     if request.method=='GET':
         form.name.data = member.name

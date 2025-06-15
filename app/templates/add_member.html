@@ -1,15 +1,71 @@
-{%extends 'base.html'%}
-{%block content%}
+{% extends 'base.html' %}
 
-<h2>Add family member</h2>
-<form method="POST">
-    {{form.hidden_tag()}}
-    <p>{{form.name.label}} {{form.name}}</p>
-    <p>{{ form.age.label }} {{ form.age() }}</p>
-    <p>{{ form.gender.label }} {{ form.gender() }}</p>
-    <p>{{ form.relation.label }} {{ form.relation() }}</p>
-    <p>{{ form.submit() }}</p>
-</form>
-<a href="{{ url_for('main.list_members') }}">Back to Members</a>
+{% block content %}
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-8 col-lg-7">
+            <div class="card shadow-sm rounded">
+                <div class="card-body p-4">
+                    <h2 class="card-title text-center mb-4 text-primary rounded">Add New Family Member</h2>
+                    <form method="POST">
+                        {{ form.hidden_tag() }}
 
-{%endblock%}
+                        <div class="mb-3">
+                            {{ form.name.label(class="form-label") }}
+                            {{ form.name(class="form-control rounded", placeholder="Enter full name") }}
+                            {% if form.name.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.name.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.age.label(class="form-label") }}
+                            {{ form.age(class="form-control rounded", placeholder="Enter age") }}
+                            {% if form.age.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.age.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.gender.label(class="form-label") }}
+                            {{ form.gender(class="form-select rounded") }} {# Use form-select for select inputs #}
+                            {% if form.gender.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.gender.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-4">
+                            {{ form.relation.label(class="form-label") }}
+                            {{ form.relation(class="form-control rounded", placeholder="e.g., Mother, Father, Child") }}
+                            {% if form.relation.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.relation.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            {{ form.submit(class="btn btn-primary btn-lg rounded") }}
+                            <a href="{{ url_for('main.list_members') }}" class="btn btn-outline-secondary btn-lg rounded">
+                                Back to Family Members
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

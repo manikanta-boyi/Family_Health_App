@@ -1,23 +1,62 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h2>Your Dashboard</h2>
-    <p>Hello, {{ current_user.username }}! From here, you can manage your family's health information.</p>
-    <a href="{{ url_for('main.emergency_mode') }}">Emergency</a>
+    <div class="row justify-content-center mt-4">
+        <div class="col-lg-10 col-md-11 col-sm-12">
+            <div class="card shadow-sm rounded-3 p-4">
+                <div class="card-body">
+                    <h2 class="card-title text-center mb-4 display-5 fw-bold text-primary">Your Dashboard</h2>
+                    <p class="lead text-center mb-4 text-muted">
+                        Hello, <span class="fw-bold text-success">{{ current_user.username }}</span>! From here, you can manage your family's health information.
+                    </p>
 
-    <ul style="list-style-type: none; padding: 0;">
-        <li style="margin-bottom: 10px;">
-            <a href="{{ url_for('main.add_member') }}">Add New Family Member</a>
-        </li>
-        <li style="margin-bottom: 10px;">
-            <a href="{{ url_for('main.list_members') }}">View All Family Members</a>
-        </li>
-        <li style="margin-bottom: 10px;">
-            <a href="{{ url_for('main.logout') }}">Logout</a>
-        </li>
-        {# Add more links here as you create new functionalities #}
-    </ul>
+                    <hr class="my-4">
 
-    {# You can add more dashboard-specific content here later, like a summary of members or recent records #}
+                    <h3 class="text-secondary mb-3">Quick Actions</h3>
+                    <div class="row g-3">
+                        <div class="col-md-6 col-lg-4">
+                            <a href="{{ url_for('main.add_member') }}" class="btn btn-primary w-100 py-3 rounded-pill shadow-sm">
+                                <i class="bi bi-person-plus-fill me-2"></i> Add New Family Member
+                            </a>
+                        </div>
+                        <div class="col-md-6 col-lg-4">
+                            <a href="{{ url_for('main.list_members') }}" class="btn btn-info w-100 py-3 rounded-pill shadow-sm text-white">
+                                <i class="bi bi-people-fill me-2"></i> View All Family Members
+                            </a>
+                        </div>
+                        <div class="col-md-6 col-lg-4">
+                            <a href="{{ url_for('main.emergency_mode') }}" class="btn btn-danger w-100 py-3 rounded-pill shadow-sm">
+                                <i class="bi bi-exclamation-triangle-fill me-2"></i> Emergency Mode
+                            </a>
+                        </div>
+                        <div class="col-md-6 col-lg-4">
+                            <a href="{{ url_for('main.logout') }}" class="btn btn-outline-secondary w-100 py-3 rounded-pill shadow-sm">
+                                <i class="bi bi-box-arrow-right me-2"></i> Logout
+                            </a>
+                        </div>
+                        {# Add more buttons/cards here as you create new functionalities #}
+                    </div>
 
+                    <hr class="my-4">
+
+                    <h3 class="text-secondary mb-3">Summary & Quick Access</h3>
+                    <div class="row g-3 justify-content-center"> <!-- Added justify-content-center for single card centering -->
+                        <!-- Card for Total Family Members -->
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card bg-light border-primary mb-3 rounded-3 shadow-sm">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title text-primary">Total Family Members</h5>
+                                    <!-- This will show '0' if total_members is not passed, or the value passed from your route.
+                                         If your route currently does NOT pass total_members, it will default to 0 (or be undefined).
+                                         It's safer to ensure your route passes it, even as 0 initially. -->
+                                    <p class="card-text display-4 fw-bold">{{ total_members }}</p>
+                                    <small class="text-muted">Currently registered</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

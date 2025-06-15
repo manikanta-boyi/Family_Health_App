@@ -1,21 +1,73 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
 {% block content %}
-<h2>{{ member.name }} ({{ member.relation }})</h2>
-<p>Age: {{ member.age }}</p>
-<p>Gender: {{ member.gender }}</p>
+    <div class="row justify-content-center mt-4">
+        <div class="col-lg-8 col-md-10 col-sm-12">
+            <div class="card shadow-sm rounded-3">
+                <div class="card-body p-4">
+                    <h2 class="card-title text-center mb-4 display-5 fw-bold text-primary">
+                        <i class="bi bi-person-fill me-2"></i> {{ member.name }}
+                        <span class="badge bg-secondary ms-2 rounded-pill py-2 px-3">{{ member.relation }}</span>
+                    </h2>
+                    <p class="lead text-center mb-4 text-muted">
+                        Details for {{ member.name }}.
+                    </p>
 
-<h3>Health Records</h3>
-<ul>
-  {% for record in member.records %}
-    <li>
-      {{ record.condition }} - {{ record.date }}
-      <a href="{{ url_for('main.edit_record', record_id=record.id) }}">Edit</a> |
-      <a href="{{ url_for('main.delete_record', record_id=record.id) }}">Delete</a>
-    </li>
-  {% endfor %}
-</ul>
+                    <div class="row text-center mb-4">
+                        <div class="col-6">
+                            <h5 class="text-info">Age</h5>
+                            <p class="fs-4 fw-bold">{{ member.age }} years old</p>
+                        </div>
+                        <div class="col-6">
+                            <h5 class="text-info">Gender</h5>
+                            <p class="fs-4 fw-bold">{{ member.gender }}</p>
+                        </div>
+                    </div>
 
-<a href="{{ url_for('main.add_record', member_id=member.id) }}">Add Health Record</a><br>
-<a href="{{ url_for('main.list_members') }}">Back to Members</a>
+                    <hr class="my-4">
+
+                    <h3 class="text-secondary mb-3 text-center">Health Records</h3>
+
+                    <div class="card rounded-3 shadow-sm border-info mb-4">
+                        <div class="card-body">
+                            {% if member.records %}
+                                <ul class="list-group list-group-flush">
+                                    {% for record in member.records %}
+                                        <li class="list-group-item py-3 d-flex justify-content-between align-items-center flex-wrap">
+                                            <div>
+                                                <h5 class="mb-1 text-info">{{ record.condition }}</h5>
+                                                <small class="text-muted">{{ record.date }}</small>
+                                            </div>
+                                            <div class="ms-md-auto mt-2 mt-md-0"> {# Pushes buttons to the right on medium screens and up #}
+                                                <a href="{{ url_for('main.edit_record', record_id=record.id) }}" class="btn btn-sm btn-outline-warning rounded-pill me-2">
+                                                    <i class="bi bi-pencil-square"></i> Edit
+                                                </a>
+                                                <a href="{{ url_for('main.delete_record', record_id=record.id) }}" class="btn btn-sm btn-outline-danger rounded-pill">
+                                                    <i class="bi bi-trash-fill"></i> Delete
+                                                </a>
+                                            </div>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% else %}
+                                <div class="alert alert-info text-center rounded-3 mb-0" role="alert">
+                                    <h4 class="alert-heading"><i class="bi bi-clipboard-plus me-2"></i>No health records added for {{ member.name }} yet!</h4>
+                                    <p class="mb-0">Click the button below to add their first record.</p>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-5">
+                        <a href="{{ url_for('main.add_record', member_id=member.id) }}" class="btn btn-primary btn-lg rounded-pill">
+                            <i class="bi bi-journal-plus me-2"></i> Add Health Record
+                        </a>
+                        <a href="{{ url_for('main.list_members') }}" class="btn btn-outline-secondary btn-lg rounded-pill">
+                            <i class="bi bi-arrow-left-circle-fill me-2"></i> Back to Members
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

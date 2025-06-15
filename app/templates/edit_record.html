@@ -1,14 +1,79 @@
 {% extends 'base.html' %}
+
 {% block content %}
-<h2>Edit Health Record</h2>
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-8 col-lg-7">
+            <div class="card shadow-sm rounded">
+                <div class="card-body p-4">
+                    <h2 class="card-title text-center mb-4 text-primary rounded">Edit Health Record</h2>
+                    <form method="POST">
+                        {{ form.hidden_tag() }}
 
-<form method="POST">
-    {{ form.hidden_tag() }}
-    <p>{{ form.condition.label }} {{ form.condition() }}</p>
-    <p>{{ form.medication.label }} {{ form.medication() }}</p>
-    <p>{{ form.notes.label }} {{ form.notes() }}</p>
-    <p>{{ form.date.label }} {{ form.date() }}</p>
-    <p>{{ form.submit() }}</p>
-</form>
+                        <div class="mb-3">
+                            {{ form.condition.label(class="form-label") }}
+                            {{ form.condition(class="form-control rounded", placeholder="e.g., Fever, Allergy, Check-up") }}
+                            {% if form.condition.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.condition.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
 
+                        <div class="mb-3">
+                            {{ form.medication.label(class="form-label") }}
+                            {{ form.medication(class="form-control rounded", rows="3", placeholder="e.g., Paracetamol, Antibiotics, No medication") }}
+                            {% if form.medication.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.medication.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.notes.label(class="form-label") }}
+                            {{ form.notes(class="form-control rounded", rows="3", placeholder="Any additional notes about the condition or visit") }}
+                            {% if form.notes.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.notes.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-4">
+                            {{ form.date.label(class="form-label") }}
+                            {{ form.date(class="form-control rounded") }}
+                            {% if form.date.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.date.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            {{ form.submit(class="btn btn-primary btn-lg rounded") }}
+                            {# Assuming member_id is available from the context for the back link to view_member #}
+                            {% if member_id is defined %}
+                                <a href="{{ url_for('main.view_member', member_id=member_id) }}" class="btn btn-outline-secondary btn-lg rounded">
+                                    <i class="bi bi-arrow-left-circle-fill me-2"></i> Back to Member Details
+                                </a>
+                            {% else %}
+                                {# Fallback if member_id is not provided, though it typically should be for edit_record #}
+                                <a href="{{ url_for('main.list_members') }}" class="btn btn-outline-secondary btn-lg rounded">
+                                    <i class="bi bi-arrow-left-circle-fill me-2"></i> Back to Members List
+                                </a>
+                            {% endif %}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
