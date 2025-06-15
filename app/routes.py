@@ -1,9 +1,13 @@
 from flask import Blueprint,render_template, flash, redirect, url_for,request
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user,login_required, current_user, logout_user
+import random
+from flask_mail import Message
+from datetime import datetime, timedelta
 
-from .forms import RegisterForm, LoginForm, FamilyMemberForm, HealthRecordForm
-from app.extensions import db,login_manager
+from .forms import RegisterForm, LoginForm, FamilyMemberForm, HealthRecordForm, OTPForm
+from app.extensions import db,login_manager,mail
+
 
 from .models import User, FamilyMember, HealthRecord
 
@@ -16,17 +20,105 @@ main = Blueprint('main',__name__)
 def home():
     return render_template('home.html')
 
+# Generating OTP
+def generate_otp():
+    rand_int = random.randint(100000,999999)
+    otp = str(rand_int)
+    return otp
+
+# Function for Send otp to user mail
+def send_otp_mail(user_mail,otp):
+    msg = Message('Your OTP for Registration', recipients=[user_mail])
+    msg.body = f'Your One-Time Password (OTP) for registration is: {otp}\n\nThis OTP is valid for 10 minutes.'
+    try:
+        mail.send(msg)
+        return True
+    except Exception as e:
+        print(f"Error sending email: {e}") # For debugging
+        return False
+
+
 @main.route('/register',methods=['GET', 'POST'])
 def register():
     form = RegisterForm()
     if form.validate_on_submit():
+        existing_user = User.query.filter_by(email=form.email.data).first()
+        if existing_user:
+            if not existing_user.is_email_verified:
+                # If user exists but not verified, resend OTP
+                otp = generate_otp()
+                existing_user.otp = otp
+                existing_user.otp_generated_at = datetime.utcnow()
+                db.session.commit()
+                send_otp_mail(existing_user.email, otp)
+                flash('An account with this email already exists but is not verified. A new OTP has been sent to your email.', 'info')
+                return redirect(url_for('main.verify_otp', user_id=existing_user.id))
+            else:
+                flash('An account with this email already exists and is verified. Please log in.', 'warning')
+                return redirect(url_for('main.login'))
+            
         hashed_pw = generate_password_hash(form.password.data)
-        user = User(username=form.username.data,email=form.email.data,password=hashed_pw)
+        otp = generate_otp()
+        user = User(username=form.username.data,
+                    email=form.email.data,
+                    password=hashed_pw,
+                    is_email_verified=False, # Set to False initially
+                    otp=otp,
+                    otp_generated_at=datetime.utcnow())
         db.session.add(user)
         db.session.commit()
-        flash('Account created succesfully')
-        return redirect(url_for('main.login'))
+
+        if send_otp_mail(user.email,otp):
+            flash('Account created successfully! A verification OTP has been sent to your email. Please verify your email.', 'success')
+            return redirect(url_for('main.verify_otp', user_id=user.id))
+        else:
+            flash('Failed to send verification email. Please try again.', 'danger')
+            db.session.delete(user)
+            db.session.commit()
+            return redirect(url_for('main.register'))
     return render_template('register.html',form=form)
+
+@main.route('/verify_otp/<int:user_id>',methods=['GET','POST'])
+def verify_otp(user_id):
+    user = User.query.get_or_404(user_id)
+    if user.is_email_verified:
+        flash('Your email is already verified. Please log in.', 'info')
+        return redirect(url_for('main.login'))
+    form = OTPForm()
+    if form.validate_on_submit():
+        # Check if OTP is expired (e.g., 10 minutes validity)
+        if user.otp_generated_at and datetime.utcnow() - user.otp_generated_at > timedelta(minutes=10):
+            flash('OTP has expired. Please request a new one.', 'danger')
+            return redirect(url_for('main.register')) 
+        if user.otp == form.otp.data:
+            user.is_email_verified = True
+            user.otp = None # Clear OTP after successful verification
+            user.otp_generated_at = None
+            db.session.commit()
+            flash('Email verified successfully! You can now log in.', 'success')
+            return redirect(url_for('main.login'))
+        else:
+            flash('Invalid OTP. Please try again.', 'danger')
+    return render_template('verify_otp.html', form=form, user_id=user.id)
+
+@main.route('/resend_otp/<int:user_id>', methods=['POST'])
+def resend_otp(user_id):
+    user = User.query.get_or_404(user_id)
+    if user.is_email_verified:
+        flash('Your email is already verified.', 'info')
+        return redirect(url_for('main.login'))
+
+    otp = generate_otp()
+    user.otp = otp
+    user.otp_generated_at = datetime.utcnow()
+    db.session.commit()
+
+    if send_otp_mail(user.email, otp):
+        flash('A new OTP has been sent to your email.', 'success')
+    else:
+        flash('Failed to send new OTP. Please try again.', 'danger')
+    return redirect(url_for('main.verify_otp', user_id=user.id))
+        
 
 @main.route('/login',methods=['GET', 'POST'])
 def login():
@@ -144,7 +236,7 @@ def edit_member(member_id):
         form.gender.data = member.gender
         form.relation.data = member.relation
 
-    return render_template('edit_member.html',form=form)
+    return render_template('edit_member.html',form=form, member=member)
 
 @main.route('/member/<int:member_id>/record')
 @login_required
@@ -175,7 +267,7 @@ def edit_record(record_id):
         flash('Record updated successfully')
         return redirect(url_for('main.view_records',member_id= record.family_member_id))
     
-    return render_template('edit_record.html',form = form)
+    return render_template('edit_record.html',form = form,record=record)
 
 @main.route('/record/<int:record_id>/delete',methods=['POST'])
 @login_required

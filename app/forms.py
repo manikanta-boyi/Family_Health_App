@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, IntegerField, TextAreaField,DateField
 from wtforms.validators import DataRequired, Email, Length, EqualTo
+import random
 
 
 # creating Registratin form
@@ -32,3 +33,12 @@ class HealthRecordForm(FlaskForm):
     notes = TextAreaField('Notes')
     date = DateField('Date',format= '%Y-%m-%d')
     submit = SubmitField('Save')
+
+
+class OTPForm(FlaskForm):
+    otp = StringField('Enter OTP',validators=[DataRequired(),Length(min=6,max=6)])
+    submit = SubmitField('Verify')
+
+
+
+
