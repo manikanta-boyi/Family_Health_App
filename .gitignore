@@ -8,4 +8,5 @@ __pycache__/
 .pytest_cache/
 
 # Operating System specific files
-.DS_Store
+.DS_Store 
+instance/site.db 
