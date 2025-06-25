@@ -12,6 +12,9 @@ class User(db.Model,UserMixin):
     otp= db.Column(db.String(6),nullable=True)
     otp_generated_at = db.Column(db.DateTime,nullable=True)
 
+    
+
+
 
 # Family member Model
 class FamilyMember(db.Model):
@@ -25,6 +28,14 @@ class FamilyMember(db.Model):
     user_id = db.Column(db.Integer,db.ForeignKey('user.id'),nullable=False)
     records = db.relationship('HealthRecord',backref='member',lazy=True)
 
+    def to_dict(self):
+        """Converts the FamilyMember object to a dictionary for JSON serialization."""
+        return {'id':self.id,
+                'name':self.name,
+                'age':self.age,
+                'gender':self.gender,
+                'relation':self.relation }
+
 class HealthRecord(db.Model):
     __tablename__ = "health_record"
     id = db.Column(db.Integer,primary_key=True)
@@ -34,3 +45,8 @@ class HealthRecord(db.Model):
     date = db.Column(db.Date)
 
     family_member_id = db.Column(db.Integer,db.ForeignKey('family_member.id'),nullable = False)
+
+    def to_dict(self):
+        return {'condition':self.condition,
+                'medication':self.medication,
+                'date':self.date}

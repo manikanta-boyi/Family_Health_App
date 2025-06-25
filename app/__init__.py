@@ -1,10 +1,11 @@
 from flask import Flask
 from .routes import main
-from .extensions import db, login_manager, migrate, mail
+from .extensions import db, login_manager, migrate, mail, jwt
 from app.models import User
 from flask_mail import Mail
 import os
-
+from flask_jwt_extended import JWTManager,jwt_required,create_access_token,create_refresh_token
+from datetime import timedelta
 
 
 app = Flask(__name__)
@@ -22,6 +23,12 @@ app.config['MAIL_USERNAME'] = os.environ.get('EMAIL_USER')
 app.config['MAIL_PASSWORD'] = os.environ.get('EMAIL_PASS')
 app.config['MAIL_DEFAULT_SENDER'] = os.environ.get('EMAIL_USER') 
 
+app.config['JWT_SECRET_KEY']='QWPFEUGIRVOIEj1352514726yfljkdgah;d'
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(minutes=15) #Access tokens valid for 15 minutes
+app.config['JWT_REFRESH_TOKEN_EXPIRES']= timedelta(days=30) #refresh tokens valid for 30 days
+
+
+
 app.register_blueprint(main)
 
 db.init_app(app) # creating database tool
@@ -31,6 +38,8 @@ login_manager.init_app(app)
 login_manager.login_view = 'main.login'
 
 mail.init_app(app)
+jwt.init_app(app)
+
 
 
 
