@@ -49,10 +49,11 @@
         {% if member.records %}
             {% for record in member.records %}
                 <div class="record">
-                    <p><span class="label">Condition:</span> {{ record.condition }}</p>
                     <p><span class="label">Date:</span> {{ record.date }}</p>
+                    <p><span class="label">Condition:</span> {{ record.condition }}</p>
                     <p><span class="label">Medication:</span> {{ record.medication }}</p>
                     <p><span class="label">Notes:</span> {{ record.notes }}</p>
+                    <p>----------</p>
                 </div>
             {% endfor %}
         {% else %}
