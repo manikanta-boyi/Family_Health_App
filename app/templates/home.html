@@ -2,10 +2,9 @@
 
 {% block content %}
     <div class="row justify-content-center">
-        <div class="col-lg-8 col-md-10 col-sm-12">
-            <!-- Hero Section / Jumbotron -->
-            <div class="p-5 mb-4 bg-light rounded-3 shadow-sm">
-                <div class="container-fluid py-5 text-center">
+        <div class="col-lg-10 col-md-11 col-sm-12">
+            <div class="p-5 mb-4 bg-light rounded-3 shadow-sm text-center">
+                <div class="container-fluid py-5">
                     <h1 class="display-4 fw-bold text-primary mb-4 rounded">Welcome to the Family Health App</h1>
                     <p class="fs-5 text-muted mb-4">Securely manage and access your family's health records in one place, ensuring everyone's well-being is just a click away.</p>
 
@@ -24,34 +23,100 @@
                 </div>
             </div>
 
-            <!-- Optional: Add more content sections below the hero -->
-            <div class="card shadow-sm mb-4 rounded">
-                <div class="card-body">
-                    <h2 class="card-title text-center text-secondary mb-3">Why Choose Our App?</h2>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">
-                            <i class="bi bi-shield-lock-fill me-2 text-info"></i>
-                            <strong>Secure Data:</strong> Your family's sensitive health information is protected with industry-standard encryption.
-                        </li>
-                        <li class="list-group-item">
-                            <i class="bi bi-people-fill me-2 text-info"></i>
-                            <strong>Family-Centric:</strong> Manage profiles for every family member, from kids to grandparents.
-                        </li>
-                        <li class="list-group-item">
-                            <i class="bi bi-calendar-check-fill me-2 text-info"></i>
-                            <strong>Appointment Tracking:</strong> Keep tabs on medical appointments and check-ups.
-                        </li>
-                        <li class="list-group-item">
-                            <i class="bi bi-clipboard-pulse-fill me-2 text-info"></i>
-                            <strong>Emergency Preparedness:</strong> Quick access to critical health info during emergencies.
-                        </li>
-                    </ul>
-                </div>
-            </div>
+            ---
 
+            <h2 class="text-center text-secondary mb-4 mt-5">Discover Our Key Features</h2>
+            <div id="featureCarousel" class="carousel slide shadow-lg rounded-3" data-bs-ride="carousel">
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#featureCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                    <button type="button" data-bs-target="#featureCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                    <button type="button" data-bs-target="#featureCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                    <button type="button" data-bs-target="#featureCarousel" data-bs-slide-to="3" aria-label="Slide 4"></button>
+                    <button type="button" data-bs-target="#featureCarousel" data-bs-slide-to="4" aria-label="Slide 5"></button>
+                </div>
+                <div class="carousel-inner rounded-3">
+                    <div class="carousel-item active p-5 bg-white">
+                        <div class="row align-items-center">
+                            <div class="col-md-6 text-center">
+                                <img src="{{ url_for('static', filename='images/secure_login.png') }}" class="img-fluid rounded shadow-sm" alt="Secure Login">
+                            </div>
+                            <div class="col-md-6 text-md-start text-center mt-4 mt-md-0">
+                                <i class="bi bi-shield-lock-fill text-primary display-3 mb-3"></i>
+                                <h3 class="fw-bold text-dark">Secure User Authentication</h3>
+                                <p class="lead text-muted">
+                                    Your data is safe with us. Our secure login and registration system ensures only you can access your family's health information.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item p-5 bg-white">
+                        <div class="row align-items-center">
+                            <div class="col-md-6 text-center order-md-2">
+                                <img src="{{ url_for('static', filename='images/family_members.png') }}" class="img-fluid rounded shadow-sm" alt="Family Members">
+                            </div>
+                            <div class="col-md-6 text-md-start text-center order-md-1 mt-4 mt-md-0">
+                                <i class="bi bi-people-fill text-success display-3 mb-3"></i>
+                                <h3 class="fw-bold text-dark">Family Member Management</h3>
+                                <p class="lead text-muted">
+                                    Add and manage profiles for every member of your family. Keep track of everyone's health in one centralized place.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item p-5 bg-white">
+                        <div class="row align-items-center">
+                            <div class="col-md-6 text-center">
+                                <img src="{{ url_for('static', filename='images/health_records.png') }}" class="img-fluid rounded shadow-sm" alt="Health Records">
+                            </div>
+                            <div class="col-md-6 text-md-start text-center mt-4 mt-md-0">
+                                <i class="bi bi-clipboard-pulse-fill text-info display-3 mb-3"></i>
+                                <h3 class="fw-bold text-dark">Detailed Health Records</h3>
+                                <p class="lead text-muted">
+                                    Log conditions, medications, appointments, and doctor's notes for each family member for a complete health history.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item p-5 bg-white">
+                        <div class="row align-items-center">
+                            <div class="col-md-6 text-center order-md-2">
+                                <img src="{{ url_for('static', filename='images/emergency_mode.png') }}" class="img-fluid rounded shadow-sm" alt="Emergency Mode">
+                            </div>
+                            <div class="col-md-6 text-md-start text-center order-md-1 mt-4 mt-md-0">
+                                <i class="bi bi-heart-pulse-fill text-danger display-3 mb-3"></i>
+                                <h3 class="fw-bold text-dark">Emergency Mode</h3>
+                                <p class="lead text-muted">
+                                    Instantly access vital health information during an emergency, including allergies and emergency contacts.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item p-5 bg-white">
+                        <div class="row align-items-center">
+                            <div class="col-md-6 text-center">
+                                <img src="{{ url_for('static', filename='images/pdf_export.png') }}" class="img-fluid rounded shadow-sm" alt="PDF Export">
+                            </div>
+                            <div class="col-md-6 text-md-start text-center mt-4 mt-md-0">
+                                <i class="bi bi-file-earmark-pdf-fill text-warning display-3 mb-3"></i>
+                                <h3 class="fw-bold text-dark">Instant PDF Export</h3>
+                                <p class="lead text-muted">
+                                    Generate a shareable PDF of a family member's health history with a single click, perfect for hospital visits or sharing with doctors.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#featureCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#featureCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
         </div>
     </div>
 {% endblock %}
-
 
 
