@@ -144,7 +144,7 @@ def logout():
     logout_user()
     return redirect(url_for('main.home'))
 
-@main.route('/members',methods=['POST'])
+@main.route('/members',methods=['GET','POST'])
 @login_required
 def list_members():
     members = FamilyMember.query.filter_by(user_id=current_user.id).all()

@@ -48,5 +48,4 @@ class HealthRecord(db.Model):
 
     def to_dict(self):
         return {'condition':self.condition,
-                'medication':self.medication,
-                'date':self.date}
+                'medication':self.medication}

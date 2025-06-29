@@ -6,6 +6,7 @@ from flask_mail import Mail
 import os
 from flask_jwt_extended import JWTManager,jwt_required,create_access_token,create_refresh_token
 from datetime import timedelta
+from .api import api
 
 
 app = Flask(__name__)
@@ -30,6 +31,7 @@ app.config['JWT_REFRESH_TOKEN_EXPIRES']= timedelta(days=30) #refresh tokens vali
 
 
 app.register_blueprint(main)
+app.register_blueprint(api)
 
 db.init_app(app) # creating database tool
 migrate.init_app(app,db)

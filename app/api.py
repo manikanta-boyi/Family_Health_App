@@ -1,6 +1,6 @@
 from flask import Blueprint,jsonify,request
 from flask_jwt_extended import create_access_token, create_refresh_token,jwt_required,get_jwt_identity
-from models import User,FamilyMember,HealthRecord
+from .models import User,FamilyMember,HealthRecord
 from werkzeug.security import check_password_hash
 
 
@@ -23,7 +23,7 @@ def api_login():
     user = User.query.filter_by(email=email).first()
 
     if user and check_password_hash(user.password,password):
-        access_token = create_access_token(identity=user.id,fresh=True)
+        access_token = create_access_token(identity=str(user.id),fresh=True)
         refresh_token = create_refresh_token(identity=user.id)
 
         return jsonify(access_token=access_token,refresh_token=refresh_token),200
@@ -35,22 +35,21 @@ def api_login():
 @api.route('/members',methods=['GET'])
 @jwt_required()
 def api_list_members():
-    """
-    API endpoint to retrieve a list of family members for the current authenticated user.
-    Requires a valid JWT access token in the Authorization header.
-    Returns JSON array of family members.
-    """
-
-    # Get the user's ID from the JWT payload
-    # This replaces current_user.id from Flask-Login
     current_user_id = get_jwt_identity()
+    
 
-    members = FamilyMember.query.filter_by(user_id = current_user_id).all()
+    members = FamilyMember.query.filter_by(user_id = int(current_user_id)).all()
+    
 
-    # Convert the list of FamilyMember objects into a list of dictionaries
-    # using the .to_dict() method you defined on  model
-    members_data = [member.to_dict() for member in members]
+    members_data = []
+    for member in members:
+        member_dict = member.to_dict()
+        members_data.append(member_dict)
+        print(f"  DEBUG: Member ID {member.id} dict:")
+        for key, value in member_dict.items():
+            print(f"    Key: {key}, Value: {value}, Type: {type(value)}")
 
+    
     return jsonify(members_data),200
 
 @api.route('/member/<int:member_id>/record',methods = ['GET'])
@@ -60,7 +59,7 @@ def api_view_record(member_id):
     member = FamilyMember.query.get(member_id)
     if not member:
         return jsonify({'msg':"member not found"}),404
-    if current_user_id != member.user_id:
+    if int(current_user_id) != member.user_id:
         return jsonify({'msg':'unauthorized request'}),403
     records = HealthRecord.query.filter_by(family_member_id=member.id).all()
 
