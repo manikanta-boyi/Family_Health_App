@@ -3,7 +3,7 @@
 {% block content %}
     <div class="row justify-content-center mt-4">
         <div class="col-lg-10 col-md-11 col-sm-12">
-            <div class="card shadow-lg rounded-3 border-danger"> {# Using border-danger for emergency theme #}
+            <div class="card shadow-lg rounded-3 border-danger">
                 <div class="card-body p-4">
                     <h2 class="card-title text-center mb-4 display-4 fw-bold text-danger">
                         <i class="bi bi-exclamation-triangle-fill me-2"></i> Emergency Mode <i class="bi bi-exclamation-triangle-fill ms-2"></i>
@@ -17,11 +17,16 @@
                     {% if members %}
                         {% for member in members %}
                             <div class="card mb-4 rounded-3 border-secondary shadow-sm">
-                                <div class="card-header bg-danger text-white rounded-top-3">
-                                    <h3 class="mb-0 fw-bold">
-                                        <i class="bi bi-person-fill me-2"></i> {{ member.name }}
-                                        <span class="badge bg-light text-danger float-end rounded-pill py-2 px-3">{{ member.relation }}</span>
-                                    </h3>
+                                <div class="card-header bg-danger text-white rounded-top-3 d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h3 class="mb-0 fw-bold">
+                                            <i class="bi bi-person-fill me-2"></i> {{ member.name }}
+                                        </h3>
+                                        <span class="badge bg-light text-danger rounded-pill py-1 px-3">{{ member.relation }}</span>
+                                    </div>
+                                    <a href="{{ url_for('main.download_pdf', member_id=member.id) }}" class="btn btn-outline-light btn-sm">
+                                        <i class="bi bi-file-earmark-pdf-fill me-1"></i> Download PDF
+                                    </a>
                                 </div>
                                 <div class="card-body">
                                     <h4 class="card-subtitle mb-3 text-secondary">Health Records:</h4>
@@ -62,3 +67,4 @@
         </div>
     </div>
 {% endblock %}
+

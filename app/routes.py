@@ -1,9 +1,11 @@
-from flask import Blueprint,render_template, flash, redirect, url_for,request
+from flask import Blueprint,render_template, flash, redirect, url_for,request, make_response
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user,login_required, current_user, logout_user
 import random
 from flask_mail import Message
 from datetime import datetime, timedelta
+from xhtml2pdf import pisa
+from io import BytesIO
 
 from .forms import RegisterForm, LoginForm, FamilyMemberForm, HealthRecordForm, OTPForm
 from app.extensions import db,login_manager,mail
@@ -286,6 +288,42 @@ def delete_record(record_id):
 def emergency_mode():
     members = FamilyMember.query.filter_by(user_id=current_user.id).all()
     return render_template('emergency.html',members=members)
+
+
+@main.route('/download_pdf/<int:member_id>')
+@login_required
+def download_pdf(member_id):
+    member = FamilyMember.query.get_or_404(member_id)
+    if member.user_id != current_user.id:
+        return "Unauthorized", 403
+
+    # Render HTML from template
+    html = render_template("pdf_template.html", member=member)
+
+    # Create a BytesIO buffer
+    pdf_buffer = BytesIO()
+
+    # Generate PDF into buffer
+    pisa_status = pisa.CreatePDF(html, dest=pdf_buffer)
+    if pisa_status.err:
+        return "PDF generation failed", 500
+
+    # Move cursor to beginning of buffer
+    pdf_buffer.seek(0)
+
+    # Create a Flask response with the PDF
+    response = make_response(pdf_buffer.read())
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Disposition'] = f'attachment; filename={member.name}_health_record.pdf'
+    return response
+
+
+
+
+    
+
+
+
 
 
     
