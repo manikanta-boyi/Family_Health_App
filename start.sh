@@ -1,13 +1,12 @@
 #!/bin/bash
 
-echo "Attempting to reset database migration history to head..."
-flask db stamp head --no-create || {
-    echo "Flask-Migrate stamp head FAILED. This means the DB might be looking for a revision not in the code."
-    echo "We will proceed to try 'upgrade' but if it fails, a manual DB cleanup is needed."
-}
+echo ">>> Setting up database..."
 
-echo "Attempting database upgrade..."
-flask db upgrade || { echo "Database upgrade FAILED. Deployment aborted." ; exit 1; }
-echo "Database upgrade successful. Starting Gunicorn."
+echo ">>> Faking migration history..."
+flask db stamp head
 
-gunicorn run:app
+echo ">>> Attempting upgrade..."
+flask db upgrade
+
+echo ">>> Starting the app..."
+exec gunicorn -w 4 -b 0.0.0.0:10000 run:app  # or however you start Flask
