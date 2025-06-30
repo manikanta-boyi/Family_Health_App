@@ -24,7 +24,7 @@ app.config['MAIL_USERNAME'] = os.environ.get('EMAIL_USER')
 app.config['MAIL_PASSWORD'] = os.environ.get('EMAIL_PASS')
 app.config['MAIL_DEFAULT_SENDER'] = os.environ.get('EMAIL_USER') 
 
-app.config['JWT_SECRET_KEY']='QWPFEUGIRVOIEj1352514726yfljkdgah;d'
+app.config['JWT_SECRET_KEY']=os.environ.get('SECRET_KEY')
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(minutes=15) #Access tokens valid for 15 minutes
 app.config['JWT_REFRESH_TOKEN_EXPIRES']= timedelta(days=30) #refresh tokens valid for 30 days
 
