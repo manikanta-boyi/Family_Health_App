@@ -9,7 +9,7 @@ class User(db.Model,UserMixin):
     id = db.Column(db.Integer,primary_key=True)
     username = db.Column(db.String(100),unique=True,nullable=False)
     email = db.Column(db.String(100),unique=True,nullable=False)
-    password = db.Column(db.String(200),nullable=False)
+    password = db.Column(db.String(512),nullable=False)
     is_email_verified = db.Column(db.Boolean,default=False)
     otp= db.Column(db.String(6),nullable=True)
     otp_generated_at = db.Column(db.DateTime,nullable=True)
