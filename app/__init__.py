@@ -7,24 +7,25 @@ import os
 from flask_jwt_extended import JWTManager,jwt_required,create_access_token,create_refresh_token
 from datetime import timedelta
 from .api import api
+from dotenv import load_dotenv
 
-
+load_dotenv()
 app = Flask(__name__)
 
 
-app.config['SECRET_KEY']=os.environ.get('SECRET_KEY')
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL') or 'sqlite:///site.db'
+app.config['SECRET_KEY']=os.getenv('SECRET_KEY')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL') or 'sqlite:///site.db'
 app.config['SQLALCHEMY_DATABASE_TRACK_MODIFICATIONS']= False
 
 app.config['MAIL_SERVER'] = 'smtp.gmail.com' 
 app.config['MAIL_PORT'] = 587             
 app.config['MAIL_USE_TLS'] = True         
 app.config['MAIL_USE_SSL'] = False        
-app.config['MAIL_USERNAME'] = os.environ.get('EMAIL_USER')
-app.config['MAIL_PASSWORD'] = os.environ.get('EMAIL_PASS')
-app.config['MAIL_DEFAULT_SENDER'] = os.environ.get('EMAIL_USER') 
+app.config['MAIL_USERNAME'] = os.getenv('EMAIL_USER')
+app.config['MAIL_PASSWORD'] = os.getenv('EMAIL_PASS')
+app.config['MAIL_DEFAULT_SENDER'] = os.getenv('EMAIL_USER') 
 
-app.config['JWT_SECRET_KEY']=os.environ.get('SECRET_KEY')
+app.config['JWT_SECRET_KEY']=os.getenv('SECRET_KEY')
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(minutes=15) #Access tokens valid for 15 minutes
 app.config['JWT_REFRESH_TOKEN_EXPIRES']= timedelta(days=30) #refresh tokens valid for 30 days
 
