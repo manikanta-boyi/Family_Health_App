@@ -1,12 +1,12 @@
 #!/bin/bash
 
-echo ">>> Setting up database..."
+# Exit immediately if a command exits with a non-zero status.
+set -e
 
-echo ">>> Faking migration history..."
-flask db stamp head
-
-echo ">>> Attempting upgrade..."
+echo ">>> Applying database migrations..."
+# This command will create tables if the database is empty and apply any new migrations.
 flask db upgrade
 
-echo ">>> Starting the app..."
-exec gunicorn -w 4 -b 0.0.0.0:10000 run:app  # or however you start Flask
+echo ">>> Starting the Gunicorn server..."
+# The 'exec' command replaces the current shell with gunicorn, which is more efficient.
+exec gunicorn -w 4 -b 0.0.0.0:10000 run:app
