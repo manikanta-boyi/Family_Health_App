@@ -97,11 +97,18 @@ def run_migrations_online():
     connectable = get_engine()
 
     with connectable.connect() as connection:
+        # --- START OF MODIFICATION ---
+        # Get the schema name from alembic.ini
+        alembic_version_table_schema = config.get_main_option("schema")
+
         context.configure(
             connection=connection,
             target_metadata=get_metadata(),
-            **conf_args
+            **conf_args,
+            # Add this line to specify the schema for the alembic_version table
+            alembic_version_table_schema=alembic_version_table_schema
         )
+        # --- END OF MODIFICATION ---
 
         with context.begin_transaction():
             context.run_migrations()
