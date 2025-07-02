@@ -5,7 +5,7 @@ from flask_login import UserMixin
 # creating model(Table) for user
 class User(db.Model,UserMixin):
     __tablename__ = 'user'
-    __table_args__ = {"schema":'health_app_schema'}
+    
     id = db.Column(db.Integer,primary_key=True)
     username = db.Column(db.String(100),unique=True,nullable=False)
     email = db.Column(db.String(100),unique=True,nullable=False)
@@ -23,14 +23,14 @@ class User(db.Model,UserMixin):
 # Family member Model
 class FamilyMember(db.Model):
     __tablename__ = "family_member"
-    __table_args__ = {"schema":'health_app_schema'}
+    
     id = db.Column(db.Integer,primary_key=True)
     name = db.Column(db.String(100),nullable=False)
     age = db.Column(db.Integer,nullable=False)
     gender = db.Column(db.String(10))
     relation = db.Column(db.String(50))
 
-    user_id = db.Column(db.Integer,db.ForeignKey('health_app_schema.user.id'),nullable=False)
+    user_id = db.Column(db.Integer,db.ForeignKey('user.id'),nullable=False)
     records = db.relationship('HealthRecord',backref='member',lazy=True)
 
     def to_dict(self):
@@ -43,14 +43,14 @@ class FamilyMember(db.Model):
 
 class HealthRecord(db.Model):
     __tablename__ = "health_record"
-    __table_args__ = {"schema":'health_app_schema'}
+    
     id = db.Column(db.Integer,primary_key=True)
     condition = db.Column(db.String(100),nullable=False)
     medication = db.Column(db.Text)
     notes = db.Column(db.Text)
     date = db.Column(db.Date)
 
-    family_member_id = db.Column(db.Integer,db.ForeignKey('health_app_schema.family_member.id'),nullable = False)
+    family_member_id = db.Column(db.Integer,db.ForeignKey('family_member.id'),nullable = False)
 
     def to_dict(self):
         return {'condition':self.condition,
