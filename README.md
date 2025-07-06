@@ -7,28 +7,20 @@ A secure web app to manage family health history and provide quick access to vit
 - Store allergies, blood group, medical conditions, etc.
 - Emergency Mode: Quickly display critical info for responders
 - Data privacy-focused
+- Can download PDF for health records
 
 ## 🛠️ Tech Stack
 - Python, Flask
 - SQLite
 - Jinja2 templating
-- Bootstrap (optional for styling)
+- Bootstrap
 
 ## 📦 Installation
 ```bash
-git clone https://github.com/yourusername/family-health-app.git
-cd family-health-app
+git clone https://github.com/manikanta-boyi/Family_Health_App.git
+cd family_health_app
 pip install -r requirements.txt
-python app.py
+python run.py
 ```
 
-## 💡 Future Enhancements
-- Add PDF export for health records
-- Integrate with wearable health devices
-- Admin panel for doctors
 
-## 📸 Screenshot
-_Include a screenshot of emergency mode page and profile page._
-
-## 📄 License
-MIT License
